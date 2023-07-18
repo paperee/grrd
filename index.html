@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html manifest="demo.appcache">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="">
+    <link rel="stylesheet" type="text/css" href="CSS/FiraCode.css">
+    <script src="JS/jquery.min.js"></script>
+    <title>麻鸡的拯救计划｜Grrd ver.1.00</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: FiraCode;
+            transition: 0.3s ease all;
+            letter-spacing: 1px;
+            color: #7D5A30;
+            cursor: default;
+            text-decoration: none;
+        }
+        .window{
+            position: absolute;
+            /* border: #7D5A30 1.5px solid; */
+            border-radius: 25px;
+            margin: auto;
+            padding: 20px;
+            width: 60%;
+            height: 40%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+        .msg {
+            /* 初期文字不显示方便读档 */
+            display: none;
+            margin: auto;
+            padding: 20px;
+            width: 97%;
+            height: 80%;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            overflow: auto;
+        }
+        .msg div {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+        .msg p{
+            font-size: 18px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+        }
+        .ul {
+            font-size: 18px;
+            margin-top: 15px;
+            margin-left: 30px;
+        }
+        li {
+            padding: 3px;
+        }
+        a {
+            cursor: pointer;
+        }
+        #ee {
+            display: block;
+        }
+        @media screen and (max-width: 1000px) {
+            p {
+                font-size: 14px;
+            }
+            .window {
+                border: 0;
+                padding: 0;
+                width: 95%;
+                height: 90%;
+            }
+            .msg {
+                margin: 10px;
+                padding: 0;
+                width: 90%;
+                height: 80%;
+            }
+            .msg div, .msg p, .ul {
+                font-size: 16px;
+            }
+        }
+    </style>
+    <script>
+        // cord: 重开数初始值
+        var cord=0;
+        var ad= {
+            o:new Audio("SE/button01a.mp3"),
+            t:new Audio("SE/button02a.mp3"),
+        };
+
+        // 如果re存档中存在值就带入cord
+        if (localStorage.getItem("re")!=null) {
+            var cord=Number(localStorage.getItem("re"));
+        };
+
+        // 很久前从xmzd那拿的标题变化
+        document.addEventListener('visibilitychange',function() {
+            if (document.visibilityState=='hidden') {
+                normal_title=document.title;
+                document.title="From awaLand";
+            } else document.title=normal_title;
+        });
+
+        // 打字机效果
+        function start(id2,text) {
+            if (id2=="a3") text=text.replace(/uwu/,cord);
+            let str='';
+            let i=0;
+            let timer=setInterval(()=> {
+                if (str.length<text.length) {
+                    str+=text[i++];
+                } else {
+                    clearInterval(timer);
+                };
+                document.getElementById(id2).innerHTML=str;
+            },40);
+
+        }
+
+        // 用于选项的普通显示
+        function d(id1,id2) {
+            document.getElementById(id1).style.display="none";
+            document.getElementById(id2).style.display="block";
+            if (id1!="a8_0"&&id1!="a11_4"&&id1!="a10_8") localStorage.setItem("save",id1);
+            ad.o.volume=0.2;
+            ad.o.play();
+        };
+
+        // zzChumo ←前端大佬
+        function b(id1,id2,text) {
+            d(id1,id2)
+            start(id2,text);
+            document.getElementById(id2).innerHTML='';
+        };
+
+        // 重开后游戏时重读档
+        function c() {
+            cord+=1;
+            localStorage.setItem("re", Number(cord));
+        };
+
+        // 进入页面自动读档
+        function ee(text) {
+            document.getElementById("ee").style.display="none";
+            if (localStorage.getItem("save")!=null) {
+                document.getElementById(localStorage.getItem("save")).style.display="block";
+                start(localStorage.getItem("save"),text);
+            } else {
+                document.getElementById("a2").style.display="block";
+                start("a2",text);
+            };
+            ad.t.volume=0.2;
+            ad.t.play();
+        };
+    </script>
+</head>
+<body oncontextmenu="window.event.returnValue=false" onselectstart="return false" onpaste="return false">
+    <div class="window">
+
+        <!--说明-->
+        <div class="msg" id="ee" onclick="ee('<p>※ 本游戏和现实中一切人事物无关。</p><p>※ 可能夹带私货。</p><p>※ 可能含有令人迷惑的剧情。</p>')">
+            <p>点击屏幕开始游戏。</p>
+            <p>本游戏进度会自动保存至本地。</p>
+        </div>
+
+        <!--死亡-->
+        <div class="msg" id="a0" onclick="b('a0','a2','<p>来自awaLand的神不忍看你试试选项后逝世。</p><p>本初神使用了白魔法。</p><p>你被送回了原点。</p>'), c()"></div>
+
+        <!--开场-->
+        <div class="msg" id="a2" onclick="b('a2','a2_1','<div>【Grrd-麻鸡的拯救计划】</div></p><p>作者: 纸片君ee</p><p>框架: 智障初墨的GAF魔改</p><p>游戏时长: 5分钟</p>')"></div>
+        <div class="msg" id="a2_1" onclick="b('a2_1','a3','<div>【Record】</div><p>重开次数: uwu</p><p>其实就是走错次数。</p><p>被本初神复活就会+=1。</p>')"></div>
+        <div class="msg" id="a3" onclick="b('a3','a3_1','<p>你是一只可怜弱小又无助但能吃的麻鸡。</p><p>都怪最近市场傻鸟肉供给不足。</p><p>你的朋友傻鸟被魔王鱼抓走了。</p>')"></div>
+        <div class="msg" id="a3_1" onclick="b('a3_1','a3_2','<p>傻鸟作为你最损最铁的朋友。</p><p>你必须去救他。</p>')"></div>
+        <div class="msg" id="a3_2" onclick="b('a3_2','a3_3','<p>这里是awaLand。</p><p>自你下定决心起。</p><p>你就开启了打怪升级之路。</p>')"></div>
+        <div class="msg" id="a3_3" onclick="b('a3_3','a4','<p>前方的路途艰难险阻。</p><p>但经历过大风大浪的你并不害怕。</p><p>甚至还有yee点点小激动。</p>')"></div>
+        <div class="msg" id="a4" onclick="b('a4','a4_1','<p>你是一只可食用的麻鸡。</p><p>你的肉质肥美, 鲜嫩多汁。</p><p>煎、炒、炖、炸无不合适……对不起串台了。</p>')"></div>
+        <div class="msg" id="a4_1" onclick="b('a4_1','a5','<p>你需要时刻注意别被抓住。</p><p>不管是人类也好魔物也好。</p><p>沦落到他们手中只有被吃的结局。</p>')"></div>
+        <div class="msg" id="a5" onclick="b('a5','a5_1','<p>你是一只吃不饱饭的麻鸡。</p><p>你只有两条瘦弱的鸡腿。</p><p>你一路上看风景走得很慢。</p>')"></div>
+        <div class="msg" id="a5_1" onclick="b('a5_1','a6','<p>十三天过去了。</p><p>在某位姓初墨名智障的人引导下。</p><p>你终于从狗洞爪巴出了鸡场。</p>')"></div>
+        <div class="msg" id="a6" onclick="b('a6','a6_1','<p>但令你更头疼的是作为鸡的先天性反射。</p><p>每到天明, 你总会忍不住叫唤: </p><p>「麻痹! 麻痹! 麻痹! 」</p>')"></div>
+        <div class="msg" id="a6_1" onclick="b('a6_1','a7','<p>你也少不了惹毛其他鸡。</p><p>因此你被大家叫做麻鸡。</p>')"></div>
+        <div class="msg" id="a7" onclick="b('a7','a7_1','<p>前方出现了三条分岔路。</p><p>你告别了带好人智障初墨。</p>')"></div>
+        <div class="msg" id="a7_1" onclick="b('a7_1','a8','<p>你是一只会思考的麻鸡。</p><p>你的每个选项都会影响结局的走向。</p><p>……有yee堆乱七八糟的结局。</p>')"></div>
+        <div class="msg" id="a8" onclick="d('a8','a8_0')"></div>
+
+        <!--你要走哪条路? -->
+        <div class="msg" id="a8_0">
+            <p>你要走哪条路? </p>
+            <ul class="ul">
+                <li><a onclick="b('a8_0','a9_1','<p>俗话说: 世上无难事, 只要肯登攀。</p><p>你抱着坚定不移的信念。</p><p>你艰难地向山顶爬去。</p>')">崎岖不平的山间小路</a></li>
+                <li><a onclick="b('a8_0','a10_0','<p>你在森林中的草丛中穿梭着。</p><p>你高兴得麻麻叫。</p>')">隐秘的林间小路</a></li>
+                <li><a onclick="b('a8_0','a11_1','<p>正值丰收好时节。</p><p>田间秋蝉的鸣叫声悦耳。</p><p>你看到辛勤工作的农民伯伯脸上洋溢着笑容。</p>')">平坦的田间小路</a></li>
+            </ul>
+        </div>
+
+            <!--崎岖不平的山间小路-->
+            <div class="msg" id="a9_1" onclick="b('a9_1','a9_2','<p>你相信你自己能刑。</p><p>……可你忘了你是一只麻鸡。</p><p>那只成天吃饱了睡睡醒了吃的麻鸡!? </p>')"></div>
+            <div class="msg" id="a9_2" onclick="b('a9_2','a9_3','<p>突然, 你脚下一打滑。</p><p>你咕噜咕噜向山下滚去。</p>')"></div>
+            <div class="msg" id="a9_3" onclick="b('a9_3','a0','<div>【Bad End】</div><p>「变圆了, 也变秃了。」</p>')"></div>
+
+            <!--隐秘的林间小路-->
+            <div class="msg" id="a10_0" onclick="b('a10_0','a10_1','<p>只要穿过这片ww绿的森林。</p><p>就能看到浮岛上的魔王城。</p><p>那里就是魔王鱼的住所。</p>')"></div>
+            <div class="msg" id="a10_1" onclick="b('a10_1','a10_2','<p>这些密密麻麻的枝干。</p><p>勾起了你当年和傻鸟在树上一起叫唤的回忆。</p>')"></div>
+            <div class="msg" id="a10_2" onclick="b('a10_2','a10_3','<p>这时, 天空突然下起了小雨。</p><p>滴答滴答打湿了你的鸡毛。</p><p>你有种不祥的预感……</p>')"></div>
+            <div class="msg" id="a10_3" onclick="b('a10_3','a10_4','<p>你战战兢兢地抬头一望。</p><p>眼前的事物把你吓得喊出了「麻痹」! </p>')"></div>
+            <div class="msg" id="a10_4" onclick="b('a10_4','a10_5','<p>头顶茂密的枝叶中。</p><p>一张白色的如同幽灵般的生物……正朝着你滴口水。</p>')"></div>
+            <div class="msg" id="a10_5" onclick="b('a10_5','a10_6','<p>那是一张一直在盯着你看的纸片。</p><p>他看起来很想要你。</p><p>刚才从天而降的口水佐证了这一切。</p>')"></div>
+            <div class="msg" id="a10_6" onclick="b('a10_6','a10_7','<p>……你不能再呆若麻鸡了。</p><p>你必须快点做出行动。</p>')"></div>
+            <div class="msg" id="a10_7" onclick="d('a10_7','a10_8')"></div>
+
+            <!--你要怎么办? -->
+            <div class="msg" id="a10_8">
+                <p>你要怎么办? </p>
+                <ul class="ul">
+                    <li><a onclick="b('a10_8','a15_1','<p>「麻痹麻痹麻痹! 」</p><p>你觉得不管是什么物种。</p><p>这么盯着你的绝对是个变态。</p>')">骂他麻痹</a></li>
+                    <li><a onclick="b('a10_8','a16_1','<p>纸片表示没想吃你的打算。</p><p>你答应了陪他聊天。</p>')">向他求饶</a></li>
+                    <li><a onclick="b('a10_8','a17_1','<p>你是一只跑步鸡。</p><p>虽然你跑得不快。</p><p>但你回过头时却没发现纸片没追上来。</p>')">撒腿就跑</a></li>
+                </ul>
+            </div>
+
+                <!--骂他麻痹-->
+                <div class="msg" id="a15_1" onclick="b('a15_1','a15_2','<p>「麻痹! 麻痹麻痹麻痹! 」</p><p>「……%*%&……%&*&……&￥&%……&%……」</p>')"></div>
+                <div class="msg" id="a15_2" onclick="b('a15_2','a15_3','<p>纸片本打算把你当宠物养的。</p><p>但被你这么一骂, 彻底怒了。</p>')"></div>
+                <div class="msg" id="a15_3" onclick="b('a15_3','a15_4','<p>你被纸片吊了起来。</p><p>你看着一只路过的miku被拦下。</p><p>被纸片强买了葱含泪血赚10日元。</p>')"></div>
+                <div class="msg" id="a15_4" onclick="b('a15_4','a15_5','<p>你和miku的葱一起被煲成麻鸡汤……</p><p>啊! 多么美味啊! </p>')"></div>
+                <div class="msg" id="a15_5" onclick="b('a15_5','a0','<div>【Bad End】</div><p>「麻痹的纸片麻痹的鸡。」</p>')"></div>
+            
+                <!--向他求饶-->
+                <div class="msg" id="a16_1" onclick="b('a16_1','a16_2','<p>你和纸片一起挂在树上。</p><p>突然, 你有种微妙的感觉。</p><p>你觉得, 也许这么挂着也不错。</p>')"></div>
+                <div class="msg" id="a16_2" onclick="b('a16_2','a16_3','<p>你忘了还有位损友傻鸟在等你拯救。</p><p>在纸片nb的懒癌的影响下。</p><p>你无意间堕落了。</p>')"></div>
+                <div class="msg" id="a16_3" onclick="b('a16_3','a0','<div>【Bad End】</div><p>「挂鸡想再挂一会机。」</p>')"></div>
+            
+                <!--撒腿就跑-->
+                <div class="msg" id="a17_1" onclick="b('a17_1','a17_2','<p>原来那张白色纸片被挂树上了。</p><p>你松了一口气。</p>')"></div>
+                <div class="msg" id="a17_2" onclick="b('a17_2','a10_7','<div>【PAPEREE】</div><p>这个选项是正确的但还没做完。</p><p>打! 给我回去吧! </p>')"></div>
+
+            <!--平坦的田间小路-->
+            <div class="msg" id="a11_1" onclick="b('a11_1','a11_2','<p>你是一只普通的麻鸡。</p><p>你除了会叫「麻痹」外和别的鸡没有区别。</p><p>你和普通鸡一样喜欢吃米。</p>')"></div>
+            <div class="msg" id="a11_2" onclick="b('a11_2','a11_3','<p>你望着不远处的稻谷堆成了山。</p><p>口水直流三千尺。</p>')"></div>
+            <div class="msg" id="a11_3" onclick="d('a11_3','a11_4')"></div>
+
+            <!--你要怎么办? -->
+            <div class="msg" id="a11_4">
+                <p>你要怎么办? </p>
+                <ul class="ul">
+                    <li><a onclick="b('a11_4','a12_1','<p>你擦了擦口水。</p><p>在几次走三步猛回头后。</p><p>你终于摆脱了美食的诱惑。</p>')">努力克制住自己</a></li>
+                    <li><a onclick="b('a11_4','a13_1','<p>即使你小心翼翼地溜过去。</p><p>但饿了几天肚子的你。</p><p>一不小心吃过头了。</p>')">悄悄跑去啃几口</a></li>
+                    <li><a onclick="b('a11_4','a14_1','<p>你发现周围没人。</p><p>便肆无忌惮吃了起来。</p>')">光明正大吃霸王餐</a></li>
+                </ul>
+            </div>
+
+                <!--努力克制住自己-->
+                <div class="msg" id="a12_1" onclick="b('a12_1','a12_2','<p>田间无遮无挡。</p><p>风儿, 是那么滴凉爽。</p>')"></div>
+                <div class="msg" id="a12_2" onclick="b('a12_2','a12_3','<p>你大摇大摆地走着。</p><p>你抬头挺胸看向前方。</p><p>你丝毫不在意脚底的情况。</p>')"></div>
+                <div class="msg" id="a12_3" onclick="b('a12_3','a12_4','<p>直到你发觉脚下空空时。</p><p>你, 落进了深深的粪坑。</p><p>你, 再也爪巴不起来了。</p>')"></div>
+                <div class="msg" id="a12_4" onclick="b('a12_4','a0','<div>【Bad End】</div><p>「美味的巧克力色。」</p>')"></div>
+
+                <!--悄悄跑去啃几口-->
+                <div class="msg" id="a13_1" onclick="b('a13_1','a13_2','<p>「啧, 哪来的杂鸡! 」</p><p>当你发现你被拎起来时已经晚了。</p>')"></div>
+                <div class="msg" id="a13_2" onclick="b('a13_2','a13_3','<p>「麻痹麻痹麻痹! 」</p><p>你吓得大叫起来。</p><p>但你的叫声让抓你的人更不爽了。</p>')"></div>
+                <div class="msg" id="a13_3" onclick="b('a13_3','a13_4','<p>当天晚上。</p><p>你被做成了香喷喷的炸鸡。</p><p>……而且还是自带麻鸡麻味的那种。</p>')"></div>
+                <div class="msg" id="a13_4" onclick="b('a13_4','a13_5','<p>从此, 炸麻鸡成了一道风靡全球的菜。</p><p>你实现了自己的人生价值。</p>')"></div>
+                <div class="msg" id="a13_5" onclick="b('a13_5','a0','<div>【Good End】</div><p>「麻痹……这不是骂人。」</p>')"></div>
+
+                <!--光明正大吃霸王餐-->
+                <div class="msg" id="a14_1" onclick="b('a14_1','a14_2','<p>你一顿狼吞虎咽。</p><p>吃饱喝足后的你倒头就睡。</p>')"></div>
+                <div class="msg" id="a14_2" onclick="b('a14_2','a14_3','<p>不知过了多长时间。</p><p>你被周围咯咯咯的声音吵醒了。</p><p>醒来时, 你发现你周围都是母鸡。</p>')"></div>
+                <div class="msg" id="a14_3" onclick="b('a14_3','a14_4','<p>有个人不停在催你们下蛋。</p><p>你感到一阵不对劲……你不再是公鸡了?! </p>')"></div>
+                <div class="msg" id="a14_4" onclick="b('a14_4','a0','<div>【Bad End】</div><p>「母鸡啊? 不是母鸡! 」</p>')"></div>
+
+        <!--<p style="text-align: center;">©2022 PAPEREE</p>-->
+    </div>
+</body>
+</html>
